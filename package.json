@@ -12,16 +12,15 @@
   "scripts": {
     "clear": "rm -rf dist/",
     "clear:all": "rm -rf node_modules/ && npm run clear",
-    "test": "echo not yet",
-    "start": "tsc && node dist/index.js",
-    "dev": "ts-node src/index.ts",
+    "test": "jest",
     "postversion": "git push --tags"
   },
   "maintainers": ["in1978 <chinafzy1978@gmail.com>"],
   "devDependencies": {
     "@types/node": "^12.11.5",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6"
+    "typescript": "^4.6",
+    "jest": "^27.5.1",
+    "mock-local-storage": "^1.1.21"
   },
   "repository": {
     "type": "git",
@@ -37,5 +36,6 @@
   "keywords": [
     "typescript", "jsstorage"
   ],
-  "bin": "./bin/cli.js"
+  "bin": "./bin/cli.js",
+  "dependencies": {}
 }
