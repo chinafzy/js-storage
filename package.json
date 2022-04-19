@@ -1,0 +1,41 @@
+{
+  "name": "js-storage",
+  "description": "",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Piotr Kowalski",
+    "email": "piecioshka@gmail.com",
+    "url": "https://piecioshka.pl/"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "clear": "rm -rf dist/",
+    "clear:all": "rm -rf node_modules/ && npm run clear",
+    "test": "echo not yet",
+    "start": "tsc && node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "postversion": "git push --tags"
+  },
+  "maintainers": ["in1978 <chinafzy1978@gmail.com>"],
+  "devDependencies": {
+    "@types/node": "^12.11.5",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:piecioshka/ts2.git"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ],
+  "keywords": [
+    "typescript", "jsstorage"
+  ],
+  "bin": "./bin/cli.js"
+}
