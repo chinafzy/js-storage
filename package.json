@@ -5,26 +5,26 @@
   "license": "MIT",
   "author": {
     "name": "Piotr Kowalski",
-    "email": "piecioshka@gmail.com",
-    "url": "https://piecioshka.pl/"
+    "email": "chinafzy1978@gmail.com",
+    "url": "https://github.com/chinafzy/js-storage"
   },
   "main": "dist/index.js",
   "scripts": {
     "clear": "rm -rf dist/",
     "clear:all": "rm -rf node_modules/ && npm run clear",
-    "test": "jest",
+    "test": "yarn tsc && yarn jest",
     "postversion": "git push --tags"
   },
   "maintainers": ["in1978 <chinafzy1978@gmail.com>"],
   "devDependencies": {
     "@types/node": "^12.11.5",
-    "typescript": "^4.6",
     "jest": "^27.5.1",
-    "mock-local-storage": "^1.1.21"
+    "mock-local-storage": "^1.1.21",
+    "typescript": "^4.6"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:piecioshka/ts2.git"
+    "url": "git@github.com:chinafzy/js-storage.git"
   },
   "files": [
     "src",
@@ -36,6 +36,5 @@
   "keywords": [
     "typescript", "jsstorage"
   ],
-  "bin": "./bin/cli.js",
-  "dependencies": {}
+  "bin": "./bin/cli.js"
 }
