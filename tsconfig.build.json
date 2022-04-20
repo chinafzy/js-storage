@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES5",
+    "declaration": true,
+    "removeComments": true,
+    "stripInternal": true,
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "exclude": ["**/*.spec.ts", "**/__mocks__", "src/__helpers__"]
+}
