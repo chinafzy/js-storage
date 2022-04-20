@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES5",
+    "target": "esnext",
     "declaration": true,
     "removeComments": true,
     "stripInternal": true,

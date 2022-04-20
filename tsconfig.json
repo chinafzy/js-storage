@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "strict": true,
+    // "strict": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,9 +14,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "checkJs": false,
-    "target": "es2015",
-    "module": "ESNext",
-    "lib": ["esnext"],
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["esnext", "dom"],
     "types": ["node", "jest"]
   }
 }
