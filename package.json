@@ -1,5 +1,5 @@
 {
-  "name": "ts-prj-tpl",
+  "name": "h5-storage",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -15,10 +15,7 @@
     "version": "npm run changelog && git add CHANGELOG.md"
   },
   "keywords": [
-    "typescript",
-    "npm",
-    "project",
-    "template"
+    "typescript", "storage", "js", "h5"
   ],
   "author": "in1978",
   "license": "MIT",
@@ -36,6 +33,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
     "mock-local-storage": "^1.1.21",
+    "node-fetch": "^2",
     "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"

@@ -1,80 +1,110 @@
-<<<<<<< HEAD
-# ts project template
+# JsStorage
 
-这个是一个 `typescript` 的项目模板。
+基于H5的localStorage/sessionStorage包装的一个缓存。实现了这些功能：
 
-参考于牛逼闪闪的 `ts-jest`
++ 基础功能 SimpleStorage
+    * 单个操作 set/get/remove
+    * 批量操作 keys/clear
++ 服务注册功能 RegisteredStorage
+    * register/getByRegistered/degister
+    * registerKeys()
 
-## 使用
+不同的Storage之间通过不同的zone来相互隔离。
 
-+ 安装依赖 `yarn install`
-+ 运行测试代码 `yarn test`
-+ 运行构建 `yarn build`
-+ 清理构建 `yarn clear`
-+ [建议] 代码格式检查 `yarn eslint`
-+ [建议] 代码格式修复 `yarn eslint-fix`
+## 使用说明
 
-## 项目说明
+### SimpleStorage
 
-### 目录结构
+```ts
+import JsStorage from 'js-storage'
+const storage = new JsStorage('simple')
 
-+ src 源码位置，一般情况下只需要关注这个目录
-+ dist 编译后生成的目录
+const key = 'k1', value = 'v1'
+storage.set(key, value)
+storage.get(key) == v1   // true 
 
-### 一定要写unit test
+storage.set(key, value, {
+  expireAfter: 100   // 缓存有效期100毫秒 
+})
+storage.get(key) == v1  // true
+setTimeout(() => storage.get(key) == value, 200)  // false，缓存200毫秒超时了
 
-unit test是报障代码质量的最简单有效方式，每次写一点功能，最好都要加上对应的测试函数，来验证自己的正确和失误。
-
-将测试代码放在源码一起是个好的管理方式。比如源文件是 `lib1.ts`，测试代码就是`lib1.spec.ts`。同时测试代码也就可以作为功能范例和使用说明。
-
-### 为什么要代码格式化
-
-长期的项目，规范是非常重要的。包括代码风格，编码规范。尤其是nodejs项目，大家各自有不同的习惯，对于长期项目来说就会有个麻烦。
-=======
-# ts2
-
-[![npm version](https://badge.fury.io/js/ts2.svg)](https://badge.fury.io/js/ts2)
-[![downloads count](https://img.shields.io/npm/dt/ts2.svg)](https://www.npmjs.com/package/ts2)
-
-:hammer: Create simple project with TypeScript support
-
-## Usage
-
-```bash
-npm create ts-project <name>
-
-# or
-
-npx ts2 <name>
 ```
 
-## Development
+### RegisteredStorage
 
-```bash
-npm install
-npm start       # compile src/index.ts to dist/index.js and execute *.js file [node]
-npm run dev     # execute src/index.ts [ts-node]
+数据的使用者不应该关心数据的获取方式和缓存策略。
+
+我们应该把数据做成服务，对于调用者来说是傻瓜式的。
+
+#### 范例 —— 做一个数据服务
+
+`sys-data.ts`
+
+```ts
+import JsStorage from 'js-storage'
+import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
+
+const storage = new JsStorage('sys-data')
+
+storage.register(
+  'countries', 
+  () => fetch(`https://restcountries.com/v3.1/all`)
+      .then(resp => resp.json()),
+  {
+      expireAfter: 3600 * 1000 * 24 * 365
+  })
+)
+
+export default storage
+
+export function getCountries() {
+  return storage.get2('countries')
+}
+
 ```
 
-## 🤝 Contributing
+`using-sys-data.ts`
 
-Contributions, issues and feature requests are welcome!<br/>
-Feel free to check [issues page](https://github.com/piecioshka/ts2/issues/).
+```ts
+import SysData from './sys-data'
 
-## Show your support
+SysData.get2('countries')  // 返回一个Promise
 
-Give a ⭐️ if this project helped you!
+```
 
-## Related
+#### 范例 —— 做一个特定的数据服务
 
-* [test-mocha-typescript](https://github.com/piecioshka/test-mocha-typescript)
-* [test-jasmine-typescript](https://github.com/piecioshka/test-jasmine-typescript)
-* [test-flowtype-vs-typescript](https://github.com/piecioshka/test-flowtype-vs-typescript)
-* [test-typescript-parcel](https://github.com/piecioshka/test-typescript-parcel)
-* [test-typescript-webpack](https://github.com/piecioshka/test-typescript-webpack)
-* [test-jest-typescript](https://github.com/piecioshka/test-jest-typescript)
+参考上面的案例，其实我们可以做一个更加干净的数据服务：
+`countries.ts`
 
-## License
+```ts
 
-[The MIT License](http://piecioshka.mit-license.org) @ 2019
->>>>>>> origin/main
+import JsStorage from 'js-storage'
+import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
+
+const storage = new JsStorage('countries')
+
+storage.register(
+  'countries', 
+  () => fetch(`https://restcountries.com/v3.1/all`)
+      .then(resp => resp.json()),
+  {
+      expireAfter: 3600 * 1000 * 24 * 365
+  })
+)
+
+export default () => storage.get2('countries')
+```
+
+使用服务的范例代码：`using-countries.ts`
+
+```ts
+import getCountries from './countries'
+
+getCountries()  // 返回一个promise
+```
+
+## TODO
+
+### 失效策略与服务器端关联，或者说【订阅】

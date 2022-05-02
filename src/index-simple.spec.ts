@@ -8,9 +8,12 @@ require( 'mock-local-storage')
 
 // const JsStorage = require('../dist/index').default
 
-const storage = new JsStorage('test1')
 
 test('simple test', async () => {
+  const storage = new JsStorage('test1')
+
+  // storage.
+  
   let key = 'k1', value = 'value1'
 
   storage.set(key, value)
