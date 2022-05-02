@@ -7,7 +7,7 @@
     * 批量操作 keys/clear
 + 服务注册功能 RegisteredStorage
     * register/getByRegistered/degister
-    * registerKeys()
+    * registeredKeys()
 
 不同的Storage之间通过不同的zone来相互隔离。
 
