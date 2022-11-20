@@ -1,4 +1,4 @@
-# JsStorage
+# H5Storage
 
 基于H5的localStorage/sessionStorage包装的一个缓存。实现了这些功能：
 
@@ -6,7 +6,7 @@
     * 单个操作 set/get/remove
     * 批量操作 keys/clear
 + 服务注册功能 RegisteredStorage
-    * register/getByRegistered/degister
+    * register/deregister/getPromise
     * registeredKeys()
 
 不同的Storage之间通过不同的zone来相互隔离。
@@ -51,9 +51,7 @@ storage.register(
   'countries', 
   () => fetch(`https://restcountries.com/v3.1/all`)
       .then(resp => resp.json()),
-  {
-      expireAfter: 3600 * 1000 * 24 * 365
-  })
+  { expireAfter: 3600 * 1000 * 24 * 365 }
 )
 
 export default storage
@@ -67,9 +65,11 @@ export function getCountries() {
 `using-sys-data.ts`
 
 ```ts
-import SysData from './sys-data'
+import SysData, { getCountries } from './sys-data'
 
 SysData.get2('countries')  // 返回一个Promise
+
+getCountries() // 和上面的一样的效果
 
 ```
 
@@ -83,15 +83,13 @@ SysData.get2('countries')  // 返回一个Promise
 import JsStorage from 'js-storage'
 import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
 
-const storage = new JsStorage('countries')
+const storage = new JsStorage('sys-countries')
 
 storage.register(
   'countries', 
   () => fetch(`https://restcountries.com/v3.1/all`)
       .then(resp => resp.json()),
-  {
-      expireAfter: 3600 * 1000 * 24 * 365
-  })
+  { expireAfter: 3600 * 1000 * 24 * 365 }
 )
 
 export default () => storage.get2('countries')

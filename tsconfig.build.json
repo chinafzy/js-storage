@@ -4,10 +4,10 @@
     "module": "CommonJS",
     "target": "esnext",
     "declaration": true,
-    "removeComments": true,
+    "removeComments": false,
     "stripInternal": true,
     "outDir": "dist"
   },
   "include": ["src"],
-  "exclude": ["**/*.spec.ts", "**/__mocks__", "src/__helpers__"]
+  "exclude": ["**/*.spec.ts", "**/*.test.ts","**/__mocks__", "src/__helpers__"]
 }

@@ -1,10 +1,10 @@
 {
   "name": "h5-storage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "clear": "rm -rf dist",
+    "clear": "rm -rf dist dist-types",
     "build": "tsc -p tsconfig.build.json",
     "test": "jest",
     "lint": "eslint --ext .js,.ts .",
