@@ -1,7 +1,7 @@
 {
-  "name": "h5-storage",
+  "name": "@equalto/js-storage",
   "version": "1.0.1",
-  "description": "",
+  "description": "js storage",
   "main": "dist/index.js",
   "scripts": {
     "clear": "rm -rf dist dist-types",
@@ -18,7 +18,6 @@
     "typescript", "storage", "js", "h5"
   ],
   "author": "in1978",
-  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
@@ -37,5 +36,14 @@
     "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinafzy/js-storage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chinafzy/js-storage/issues"
+  },
+  "homepage": "https://github.com/chinafzy/js-storage#readme"
 }

@@ -1,4 +1,4 @@
-# H5Storage
+# js-storage
 
 基于H5的localStorage/sessionStorage包装的一个缓存。实现了这些功能：
 
@@ -14,6 +14,7 @@
 ## 使用说明
 
 ### SimpleStorage
+普通的Map操作
 
 ```ts
 import JsStorage from 'js-storage'
@@ -33,9 +34,9 @@ setTimeout(() => storage.get(key) == value, 200)  // false，缓存200毫秒超�
 
 ### RegisteredStorage
 
-数据的使用者不应该关心数据的获取方式和缓存策略。
+数据的使用者不应该关心数据的获取方式和缓存策略。 我们应该把数据做成服务，对于调用者来说是傻瓜式的。
 
-我们应该把数据做成服务，对于调用者来说是傻瓜式的。
+因此有了`数据服务注册`的概念 
 
 #### 范例 —— 做一个数据服务
 
@@ -67,7 +68,7 @@ SysData.get2('countries')  // 返回一个Promise
 
 #### 范例 —— 做一个特定的数据服务
 
-参考上面的案例，其实我们可以做一个更加干净的数据服务：
+或者做一个更加干净的数据服务：
 `countries.ts`
 
 ```ts
