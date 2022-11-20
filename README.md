@@ -55,22 +55,14 @@ storage.register(
 )
 
 export default storage
-
-export function getCountries() {
-  return storage.get2('countries')
-}
-
 ```
 
-`using-sys-data.ts`
+调用代码 `using-sys-data.ts`
 
 ```ts
-import SysData, { getCountries } from './sys-data'
+import SysData from './sys-data'
 
 SysData.get2('countries')  // 返回一个Promise
-
-getCountries() // 和上面的一样的效果
-
 ```
 
 #### 范例 —— 做一个特定的数据服务
@@ -79,20 +71,19 @@ getCountries() // 和上面的一样的效果
 `countries.ts`
 
 ```ts
-
 import JsStorage from 'js-storage'
 import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
 
 const storage = new JsStorage('sys-countries')
 
-storage.register(
+const getCountries = storage.register(
   'countries', 
   () => fetch(`https://restcountries.com/v3.1/all`)
       .then(resp => resp.json()),
   { expireAfter: 3600 * 1000 * 24 * 365 }
 )
 
-export default () => storage.get2('countries')
+export default getCountries
 ```
 
 使用服务的范例代码：`using-countries.ts`
