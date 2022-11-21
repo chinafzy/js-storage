@@ -1,4 +1,4 @@
-import {NowOrPromise} from "./common-types";
+import { NowOrPromiseSupplier, Supplier } from "./common-types";
 
 export function sleep(ms = 0): Promise<void> {
   return ms < 1 ? Promise.resolve() : new Promise((resolve) => setTimeout(resolve, ms))
@@ -10,7 +10,7 @@ export function sleep(ms = 0): Promise<void> {
  *
  * @param fn
  */
-export function singleShotFn<T>(fn: NowOrPromise<T>): () => Promise<T> {
+export function singleShotFn<T>(fn: NowOrPromiseSupplier<T>): Supplier<Promise<T>> {
   let p: Promise<T> = null
 
   function buildP() {

@@ -1,4 +1,4 @@
-import {NowOrPromise} from './common-types'
+import {NowOrPromiseSupplier} from './common-types'
 import {RegisteredStorage, RegisterOpts} from './registered-storage'
 import {retrieveExpireAt, SetOpts, SimpleStorage} from './simple-storage'
 import {singleShotFn} from "./utils";
@@ -79,7 +79,7 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
     this.keys().forEach(this.remove.bind(this))
   }
 
-  register<T>(key: string, fnLoader: NowOrPromise<T>, opts: RegisterOpts): () => Promise<T> {
+  register<T>(key: string, fnLoader: NowOrPromiseSupplier<T>, opts: RegisterOpts): () => Promise<T> {
     const safeFn = singleShotFn(fnLoader)
 
     const handler = this._registered[key] = async () => {

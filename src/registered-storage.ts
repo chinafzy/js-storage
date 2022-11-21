@@ -1,6 +1,5 @@
-import {NowOrPromise} from "./common-types";
-import {SetOpts} from "./simple-storage";
-
+import { NowOrPromiseSupplier, PromiseSupplier } from './common-types'
+import { SetOpts } from './simple-storage'
 
 export type RegisterOpts = SetOpts & {
   /**
@@ -25,7 +24,7 @@ export interface RegisteredStorage {
    * @param fnLoader 值加载函数，
    * @param opts
    */
-  register<T>(key: string, fnLoader: NowOrPromise<T>, opts: RegisterOpts): () => Promise<T>
+  register<T>(key: string, fnLoader: NowOrPromiseSupplier<T>, opts: RegisterOpts): PromiseSupplier<T>
 
   /**
    * 取消一条数据注册

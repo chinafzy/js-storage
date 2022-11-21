@@ -21,7 +21,7 @@ test('simple test', async () => {
   expect(storage.get(key)).toBe(undefined)
   expect(storage.keys()).toEqual([])
 
-  storage.set(key, value, {expireAfter: 200})
+  storage.set(key, value, { expireAfter: 200})
   // console.log(`happens`, storage.get(key))
   expect(storage.get(key)).toEqual(value)
   await sleep(300)
