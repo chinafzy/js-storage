@@ -15,4 +15,4 @@ export type PromiseSupplier<T> = Supplier<Promise<T>>
 /**
  * 提供一个数据，或者一个Promise
  */
-export type NowOrPromiseSupplier<T> = Supplier<T> | Supplier<Promise<T>>
+export type NowOrPromiseSupplier<T> = Supplier<T | Promise<T>>

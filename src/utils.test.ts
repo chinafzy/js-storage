@@ -1,14 +1,13 @@
-import {singleShotFn, sleep} from "./utils";
+import { singleShotFn, sleep } from './utils'
 
 test('single-shot', async () => {
-
   let c = 0
 
   function fn() {
     return new Promise((resolve) => {
       setTimeout(() => {
         c++
-        resolve(new Object())
+        resolve(Object())
       }, 500)
     })
   }

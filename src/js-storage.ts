@@ -1,7 +1,7 @@
-import {NowOrPromiseSupplier} from './common-types'
-import {RegisteredStorage, RegisterOpts} from './registered-storage'
-import {retrieveExpireAt, SetOpts, SimpleStorage} from './simple-storage'
-import {singleShotFn} from "./utils";
+import { NowOrPromiseSupplier } from './common-types'
+import { RegisteredStorage, RegisterOpts } from './registered-storage'
+import { SetOpts, SimpleStorage } from './simple-storage'
+import { singleShotFn } from './utils'
 
 const expireTag = '__expire__'
 
@@ -27,8 +27,10 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
   }
 
   get<T>(key: string): T {
-    const expireKey = this._expireKey(key), realKey = this._storeKey(key);
-    const strExpire = this._engine.getItem(expireKey), str = this._engine.getItem(realKey);
+    const expireKey = this._expireKey(key),
+      realKey = this._storeKey(key)
+    const strExpire = this._engine.getItem(expireKey),
+      str = this._engine.getItem(realKey)
 
     if (!str) return undefined
 
@@ -41,8 +43,8 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
     return JSON.parse(str)
   }
 
-  set(key: string, value: any, opts: SetOpts = {}): void {
-    const expireAt = retrieveExpireAt(opts)
+  set(key: string, value: unknown, opts: SetOpts = {}): void {
+    const expireAt = SetOpts.retrieveExpireAt(opts)
     if (expireAt) this._engine.setItem(this._expireKey(key), stamp2str(new Date(expireAt)))
     this._engine.setItem(this._storeKey(key), JSON.stringify(value))
   }
@@ -53,7 +55,8 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
   }
 
   keys(): string[] {
-    const keys = [], dels = []
+    const keys = [],
+      dels = []
     for (let i = 0; i < this._engine.length; i++) {
       let key = this._engine.key(i)
       if (!key) continue
@@ -62,7 +65,7 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
 
       key = key.substring(this._prefix.length)
 
-      let strExpire = this._engine.getItem(this._expireKey(key))
+      const strExpire = this._engine.getItem(this._expireKey(key))
       if (strExpire && new Date().getTime() > str2stamp(strExpire).getTime()) {
         dels.push(key)
       } else {
@@ -82,7 +85,7 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
   register<T>(key: string, fnLoader: NowOrPromiseSupplier<T>, opts: RegisterOpts): () => Promise<T> {
     const safeFn = singleShotFn(fnLoader)
 
-    const handler = this._registered[key] = async () => {
+    const handler = (this._registered[key] = async () => {
       let v = this.get(key)
       if (typeof v != 'undefined') return v
 
@@ -91,7 +94,7 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
       this.set(key, v, opts)
 
       return v
-    }
+    })
 
     if (opts.initNow) handler()
 
@@ -121,7 +124,6 @@ class JsStorage implements SimpleStorage, RegisteredStorage {
   private _expireKey(key: string): string {
     return this._prefix + key + expireTag
   }
-
 }
 
 export default JsStorage
@@ -131,8 +133,9 @@ export default JsStorage
 //
 
 function str2stamp(str: string) {
-  let dt = str.split(' ')
-  let darr = dt[0].split('-'), tarr = dt[1].split(':')
+  const dt = str.split(' ')
+  const darr = dt[0].split('-'),
+    tarr = dt[1].split(':')
 
   return new Date(
     parseInt(darr[0]),
@@ -141,17 +144,22 @@ function str2stamp(str: string) {
     parseInt(tarr[0]),
     parseInt(tarr[1]),
     parseInt(tarr[2]),
-    parseInt(tarr[3])
+    parseInt(tarr[3]),
   )
 }
 
 function stamp2str(stamp: Date) {
   return [
     [lpad(stamp.getFullYear(), 4), lpad(stamp.getMonth() + 1, 2), lpad(stamp.getDate(), 2)].join('-'),
-    [lpad(stamp.getHours(), 2), lpad(stamp.getMinutes(), 2), lpad(stamp.getSeconds(), 2), lpad(stamp.getMilliseconds(), 3)].join(':')
+    [
+      lpad(stamp.getHours(), 2),
+      lpad(stamp.getMinutes(), 2),
+      lpad(stamp.getSeconds(), 2),
+      lpad(stamp.getMilliseconds(), 3),
+    ].join(':'),
   ].join(' ')
 }
 
-function lpad(v: any, size: number) {
+function lpad(v: unknown, size: number) {
   return ('0000000' + v).slice(-size)
 }

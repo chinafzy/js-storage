@@ -1,4 +1,4 @@
-import {Supplier} from "./common-types";
+import { Supplier } from './common-types'
 
 export type SetOpts = {
   /**
@@ -17,17 +17,32 @@ export type SetOpts = {
   expireFn?: Supplier<SetOpts>
 }
 
-export function retrieveExpireAt(opts: SetOpts): number {
-  if (!opts) return undefined
+// eslint-disable-next-line @typescript-eslint/no-namespace,@typescript-eslint/no-redeclare
+export namespace SetOpts {
+  export function retrieveExpireAt(opts: SetOpts): number {
+    if (!opts) return undefined
 
-  while (typeof opts.expireFn != 'undefined') opts = opts.expireFn()
+    while (typeof opts.expireFn != 'undefined') opts = opts.expireFn()
 
-  if (typeof opts.expireAt != 'undefined') return opts.expireAt
+    if (typeof opts.expireAt != 'undefined') return opts.expireAt
 
-  if (typeof opts.expireAfter != 'undefined') return new Date().getTime() + opts.expireAfter
+    if (typeof opts.expireAfter != 'undefined') return new Date().getTime() + opts.expireAfter
 
-  return null
+    return null
+  }
 }
+
+// export function retrieveExpireAt(opts: SetOpts): number {
+//   if (!opts) return undefined
+//
+//   while (typeof opts.expireFn != 'undefined') opts = opts.expireFn()
+//
+//   if (typeof opts.expireAt != 'undefined') return opts.expireAt
+//
+//   if (typeof opts.expireAfter != 'undefined') return new Date().getTime() + opts.expireAfter
+//
+//   return null
+// }
 
 /**
  * 一个简单工作模式的Storage。支持单条操作set/get/remove，以及批量操作keys/clear。
@@ -40,7 +55,7 @@ export interface SimpleStorage {
    * @param value
    * @param opts
    */
-  set(key: string, value: any, opts: SetOpts): void
+  set(key: string, value: unknown, opts: SetOpts): void
 
   /**
    * 获取一个值
