@@ -1,56 +1,57 @@
 # js-storage
 
-基于H5的localStorage/sessionStorage包装的一个缓存。实现了这些功能：
+A TypeScript wrapper for HTML5 localStorage/sessionStorage with advanced caching capabilities.
 
-+ 基础功能 SimpleStorage
-    * 单个操作 set/get/remove
-    * 批量操作 keys/clear
-+ 服务注册功能 RegisteredStorage
+## Features
+
++ **SimpleStorage** - Basic operations
+    * Individual operations: set/get/remove
+    * Batch operations: keys/clear
++ **RegisteredStorage** - Service registration
     * register/deregister/getPromise
     * registeredKeys()
 
-不同的Storage之间通过不同的zone来相互隔离。
+Different Storage instances are isolated through different zones.
 
-## 使用说明
+## Usage
 
 ### SimpleStorage
-普通的Map操作
+Basic Map-like operations
 
 ```ts
-import JsStorage from 'js-storage'
+import JsStorage from '@equalto/js-storage'
 const storage = new JsStorage('simple')
 
 const key = 'k1', value = 'v1'
 storage.set(key, value)
-storage.get(key) == v1   // true 
+storage.get(key) == value   // true 
 
 storage.set(key, value, {
-  expireAfter: 100   // 缓存有效期100毫秒 
+  expireAfter: 100   // Cache expires after 100ms
 })
-storage.get(key) == v1  // true
-setTimeout(() => storage.get(key) == value, 200)  // false，缓存200毫秒超时了
-
+storage.get(key) == value  // true
+setTimeout(() => storage.get(key) == value, 200)  // false, cache expired after 200ms
 ```
 
 ### RegisteredStorage
 
-数据的使用者不应该关心数据的获取方式和缓存策略。 我们应该把数据做成服务，对于调用者来说是傻瓜式的。
+Data consumers shouldn't care about data fetching methods and caching strategies. We should make data into services that are foolproof for callers.
 
-因此有了`数据服务注册`的概念 
+Hence the concept of `Data Service Registration`.
 
-#### 范例 —— 做一个数据服务
+#### Example - Register data service
 
 `sys-data.ts`
 
 ```ts
-import JsStorage from 'js-storage'
-import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
+import JsStorage from '@equalto/js-storage'
+import fetch from "node-fetch"   // For non-web environments, use node-fetch@2 to simulate fetch
 
 const storage = new JsStorage('sys-data')
 
 storage.register(
   'countries', 
-  () => fetch(`https://restcountries.com/v3.1/all`)
+  () => fetch(`https://restcountries.com/v3.1/all?fields=name`)
       .then(resp => resp.json()),
   { expireAfter: 3600 * 1000 * 24 * 365 }
 )
@@ -58,28 +59,28 @@ storage.register(
 export default storage
 ```
 
-调用代码 `using-sys-data.ts`
+Usage code `using-sys-data.ts`
 
 ```ts
 import SysData from './sys-data'
 
-SysData.get2('countries')  // 返回一个Promise
+SysData.get2('countries')  // Returns a Promise
 ```
 
-#### 范例 —— 做一个特定的数据服务
+#### Example - Create a specific data service
 
-或者做一个更加干净的数据服务：
+Or create a cleaner data service:
 `countries.ts`
 
 ```ts
-import JsStorage from 'js-storage'
-import fetch from "node-fetch"   // 非web环境，使用 node-fetch@2 来模拟fetch函数 
+import JsStorage from '@equalto/js-storage'
+import fetch from "node-fetch"   // For non-web environments, use node-fetch@2 to simulate fetch
 
 const storage = new JsStorage('sys-countries')
 
 const getCountries = storage.register(
   'countries', 
-  () => fetch(`https://restcountries.com/v3.1/all`)
+  () => fetch(`https://restcountries.com/v3.1/all?fields=name`)
       .then(resp => resp.json()),
   { expireAfter: 3600 * 1000 * 24 * 365 }
 )
@@ -87,14 +88,43 @@ const getCountries = storage.register(
 export default getCountries
 ```
 
-使用服务的范例代码：`using-countries.ts`
+Service usage example: `using-countries.ts`
 
 ```ts
 import getCountries from './countries'
 
-getCountries()  // 返回一个promise
+getCountries()  // Returns a promise
 ```
 
-## TODO
+## Installation
 
-### 失效策略与服务器端关联，或者说【订阅】
+```bash
+npm install @equalto/js-storage
+```
+
+## API Reference
+
+### JsStorage Constructor
+```ts
+new JsStorage(zone?: string, engine?: Storage)
+```
+
+### SetOpts
+```ts
+interface SetOpts {
+  expireAt?: number      // Expire at specific timestamp
+  expireAfter?: number   // Expire after milliseconds
+  expireFn?: () => SetOpts // Dynamic expiration function
+}
+```
+
+### RegisterOpts
+```ts
+interface RegisterOpts extends SetOpts {
+  initNow?: boolean      // Execute immediately after registration
+}
+```
+
+## License
+
+MIT
