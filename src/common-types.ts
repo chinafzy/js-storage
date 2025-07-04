@@ -3,7 +3,7 @@
  */
 export type Transformer<S, T> = (source: S) => T
 
-export type Predicate<T> = Transformer<T, boolean>
+export type Predicate<T> = (source: T) => boolean
 
 /**
  * 数据提供者

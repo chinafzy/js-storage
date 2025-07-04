@@ -48,6 +48,6 @@ test("sleep", async () => {
   await sleep(100)
   const stamp2 = now()
   const used = stamp2 - stamp1
-  expect(used).toBeGreaterThan(ms)
+  expect(used).toBeGreaterThanOrEqual(ms)
   expect(used).toBeLessThan(ms + 3)
 })

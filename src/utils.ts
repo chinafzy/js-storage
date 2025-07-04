@@ -1,4 +1,4 @@
-import { NowOrPromiseSupplier, Supplier } from "./common-types";
+import { NowOrPromiseSupplier, Supplier } from './common-types'
 
 export function sleep(ms = 0): Promise<void> {
   return ms < 1 ? Promise.resolve() : new Promise((resolve) => setTimeout(resolve, ms))

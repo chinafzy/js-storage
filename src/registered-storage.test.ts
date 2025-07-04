@@ -6,6 +6,12 @@ require('mock-local-storage')
 
 jest.setTimeout(10000)
 
+interface Country {
+  name: {
+    common: string
+  }
+  flags: Record<string, string>
+}
 
 test('registered', async () => {
   const storage = new JsStorage('registered')
@@ -14,13 +20,12 @@ test('registered', async () => {
   const key = 'k1',
     value = 1
   const loaderStack = []
-  storage.register(key,
-    () => new Promise((resolve) =>
-      setTimeout(() => {
-        loaderStack.push(new Date().getTime())
-        resolve(value)
-      }, 100),
-    ), {expireAfter: 200})
+  storage.register(key, () => new Promise((resolve) =>
+    setTimeout(() => {
+      loaderStack.push(new Date().getTime())
+      resolve(value)
+    }, 100),
+  ), { expireAfter: 200 })
 
   {
     // 第一次运行
@@ -47,19 +52,20 @@ test('registered', async () => {
 })
 
 test('country', async () => {
-
   const storage = new JsStorage('system')
   storage.clear()
 
-  storage.register('country', () => fetch(`https://restcountries.com/v3.1/all`).then((resp) => resp.json()), {
-    expireAfter: 3600 * 1000,
-  })
+  storage.register(
+    'country',
+    () => fetch(`https://restcountries.com/v3.1/all?fields=name,flags`).then((resp) => resp.json()),
+    { expireAfter: 3600 * 1000 },
+  )
 
-  const china = (await storage.get2<any[]>('country'))
+  const china = (await storage.get2<Country[]>('country'))
     .find((country) => country.name.common == 'China')
 
   expect(china).not.toBeNull()
-  // console.log(`china`, china)
+  console.log(`china`, china)
 })
 
 
